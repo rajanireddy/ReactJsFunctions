@@ -1,4 +1,4 @@
-import React from 'react';
+//import React from 'react';
 /*import logo from './logo.svg';
 /*import './App.css';*/
 
@@ -17,16 +17,16 @@ import React from 'react';
    const Body =() => <h1> Hello World </h1>
    const Footer =() => <p> Reactjs </p>*/
 
-  /* class App extends React.Component{
+   /* class App extends React.Component{
         render(){
            return <Sample iphone="six"/>
            }
      }
 
-     const Sample =(props)=><h1>{props.iphone}</h1>
+       const Sample =(props)=><h1>{props.iphone}</h1>
 
-     Sample.propTypes={
-        iphone(props,propName,Component){
+        Sample.propTypes={
+           iphone(props,propName,Component){
         if(!(propName in props)){
           return new Error(`Missing ${propName}`)
           }
@@ -34,19 +34,19 @@ import React from 'react';
             return new Error(`${propName} is too short`)
             }
         }
-     }
+    }
 
 export default App;*/
 //state component
 
- class App extends React.Component {
+ /*class App extends React.Component {
  	constructor(){
  		super()
  		this.state ={
  			val:0
  		}
  	}
-    update(){
+    update(e){
  		this.setState({val:this.state.val+1})
  	}
 	render(){
@@ -57,9 +57,53 @@ export default App;*/
  			</div>
  		)
  	}
- }
- export default App;
+ }*/
+// export default App;
 
 
+import React from 'react';
 
+class App extends React.Component {
+constructor(){
+	super();
+	this.state = {
+		items :[]
+	}
+}
+filter(e){
+	this.setState({filter:e.target.value})
+}
+componentWillMount(){
+	fetch('https://swapi.co/api/people/?format=json').then(response =>response.json())
+		.then(({results:items})=>this.setState({items}))
+}
+render(){
+	let items = this.state.items
+	if(this.state.filter){
+		items = items.filter(item=>item.name.toLowerCase().includes(this.state.filter.toLowerCase()))
+	}
+	return (
+		<div>
+			<input type="text" onChange={this.filter.bind(this)}/>
+			{items.map(item=><Person update={item}/>)}
+		</div>
+	)
+}
+}
+
+const Person = (prop) =>
+                        <div>
+                           <h4>
+                            {prop.update.name}
+                            <br/>
+                            {prop.update.vehicles}
+                            <br/>
+                            {prop.update.starships}
+                            <br/>
+                            {prop.update.films}
+                            <br/>
+                          </h4>
+                        </div>
+
+export default App;
 
